@@ -1,0 +1,220 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "language_models": {
+    "google": {
+      "api_url": "https://api.whatai.cc"
+    },
+    "anthropic": {
+      "api_url": "https://api.whatai.cc"
+    },
+    "openai": {
+      "api_url": "https://api.whatai.cc/v1"
+    }
+  },
+  "disable_ai": false,
+  "icon_theme": {
+    "mode": "dark",
+    "light": "Zed (Default)",
+    "dark": "Material Icon Theme"
+  },
+  "extend_comment_on_newline": false,
+  "agent": {
+    "use_modifier_to_send": true,
+    "always_allow_tool_actions": true,
+    "default_profile": "write",
+    "inline_assistant_model": {
+      "provider": "deepseek",
+      "model": "deepseek-reasoner"
+    },
+    "model_parameters": [
+      {
+        "provider": "deepseek",
+        "model": "deepseek-reasoner",
+        "temperature": 0.0
+      }
+    ],
+    "default_model": {
+      "provider": "anthropic",
+      "model": "claude-haiku-4-5-thinking-latest"
+    }
+  },
+  "ui_font_size": 16,
+  "buffer_font_size": 13,
+  "buffer_font_family": "Maple Mono NF CN",
+  "format_on_save": "on",
+  "theme": {
+    "mode": "dark",
+    "light": "One Light",
+    "dark": "GitHub Dark Default"
+  },
+  "auto_signature_help": true,
+  "show_signature_help_after_edits": true,
+  "base_keymap": "JetBrains",
+  "active_pane_modifiers": {
+    "border_size": 0.0,
+    "inactive_opacity": 1.0
+  },
+  "bottom_dock_layout": "contained",
+  "completions": {
+    "words": "fallback",
+    "lsp": true,
+    "lsp_fetch_timeout_ms": 0,
+    "lsp_insert_mode": "replace_suffix"
+  },
+  "autosave": {
+    "after_delay": {
+      "milliseconds": 1000
+    }
+  },
+  "file_types": {
+    "XML": ["rdf", "gpx", "kml"]
+  },
+  "inlay_hints": {
+    "enabled": true,
+    "show_type_hints": true,
+    "show_parameter_hints": true,
+    "show_other_hints": true
+  },
+  "use_autoclose": true,
+  "file_scan_exclusions": [
+    "**/.git",
+    "**.classpath",
+    "**.project",
+    "**.venv",
+    "**/.svn",
+    "**/.hg",
+    "**/CVS",
+    "**/target",
+    "**/.target",
+    "**/Thumbs.db",
+    "**/.classpath",
+    "**/.settings",
+    "**/vendor",
+    "**/.tmp*"
+  ],
+  "proxy": "socks5h://127.0.0.1:10808",
+  "languages": {
+    "Rust": {
+      "format_on_save": "on",
+      "enable_language_server": true,
+      "use_autoclose": true,
+      "use_auto_surround": true,
+      "always_treat_brackets_as_autoclosed": true,
+      "show_completions_on_input": true
+    }
+  },
+  "lsp": {
+    "rust-analyzer": {
+      "initialization_options": {
+        "check": {
+          "command": "clippy" // rust-analyzer.check.command (default: "check")
+        },
+        "rust": {
+          "analyzerTargetDir": true
+        },
+        "inlayHints": {
+          "maxLength": null,
+          "lifetimeElisionHints": {
+            "enable": "skip_trivial",
+            "useParameterNames": true
+          },
+          "closureReturnTypeHints": {
+            "enable": "always"
+          }
+        },
+        "path": "/home/ptk/.cargo/bin/rust-analyzer",
+        "binary": {
+          "ignore_system_version": true
+        }
+      }
+    },
+    "jdtls": {
+      "initialization_options": {
+        "bundles": [],
+        "settings": {
+          "java": {
+            "home": "/usr/lib/jvm/java-21-openjdk",
+            "errors": {
+              "incompleteClasspath": {
+                "severity": "warning"
+              }
+            },
+            "configuration": {
+              "updateBuildConfiguration": "interactive",
+              "maven": {
+                "userSettings": null
+              }
+            },
+            "trace": {
+              "server": "verbose"
+            },
+            "import": {
+              "gradle": {
+                "enabled": false
+              },
+              "maven": {
+                "enabled": true
+              },
+              "exclusions": [
+                "**/node_modules/**",
+                "**/.metadata/**",
+                "**/archetype-resources/**",
+                "**/META-INF/maven/**",
+                "/**/test/**",
+                "**.classpath",
+                "**.project",
+                "**/target"
+              ]
+            },
+            "jdt": {
+              "ls": {
+                "lombokSupport": {
+                  "enabled": true // Set this to true to enable lombok support
+                }
+              }
+            },
+            "referencesCodeLens": {
+              "enabled": false
+            },
+            "signatureHelp": {
+              "enabled": false
+            },
+            "implementationsCodeLens": {
+              "enabled": false
+            },
+            "format": {
+              "enabled": true
+            },
+            "saveActions": {
+              "organizeImports": false
+            },
+            "contentProvider": {
+              "preferred": null
+            },
+            "autobuild": {
+              "enabled": false
+            },
+            "completion": {
+              "favoriteStaticMembers": [
+                "org.junit.Assert.*",
+                "org.junit.Assume.*",
+                "org.junit.jupiter.api.Assertions.*",
+                "org.junit.jupiter.api.Assumptions.*",
+                "org.junit.jupiter.api.DynamicContainer.*",
+                "org.junit.jupiter.api.DynamicTest.*"
+              ],
+              "importOrder": ["java", "javax", "com", "org"]
+            }
+          }
+        }
+      }
+    }
+  }
+}

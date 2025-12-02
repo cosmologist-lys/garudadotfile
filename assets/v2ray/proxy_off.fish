@@ -15,6 +15,19 @@ set -e ALL_PROXY
 
 echo "✓ 终端代理已关闭"
 
+# 2. [新增] 清除 Git 全局代理
+if command -v git >/dev/null 2>&1
+    git config --global --unset http.proxy
+    git config --global --unset https.proxy
+    echo "✓ Git 全局代理已移除"
+end
+
+# 3. [新增] 移除 Root/Sudo 代理配置
+if test -f /etc/sudoers.d/temp_proxy_keep
+    sudo rm /etc/sudoers.d/temp_proxy_keep
+    echo "✓ Sudo/Root 代理配置已清理"
+end
+
 # 检测桌面环境并关闭系统代理
 if set -q XDG_CURRENT_DESKTOP
     switch $XDG_CURRENT_DESKTOP

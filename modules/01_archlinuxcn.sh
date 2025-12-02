@@ -21,7 +21,7 @@ ensure_archcn_repo() {
         return
     fi
 
-    echo "添加 archlinuxcn 仓库 (清华源)..."
+    echo "添加 archlinuxcn 仓库 ..."
     sudo cp "$PACMAN_CONF" "$PACMAN_CONF.bak.$(date +%Y%m%d_%H%M%S)"
 
     # 直接写入清华源，避免首次连接失败

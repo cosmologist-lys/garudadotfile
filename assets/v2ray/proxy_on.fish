@@ -34,6 +34,21 @@ set -gx ALL_PROXY "socks5://$PROXY_SERVER:$PROXY_PORT"
 
 echo "✓ Fish 终端代理已开启"
 
+# 3. [新增] 设置 Git 全局代理
+if command -v git >/dev/null 2>&1
+    git config --global http.proxy "http://$PROXY_SERVER:$PROXY_PORT_HTTP"
+    git config --global https.proxy "http://$PROXY_SERVER:$PROXY_PORT_HTTP"
+    echo "✓ Git 全局代理已设置"
+end
+
+# 4. [新增] 设置 Root/Sudo 代理能力
+# 通过创建临时 sudoers 配置，允许 sudo 命令继承代理相关的环境变量
+# 这能确保 sudo pacman, sudo flatpak 等命令也能走代理
+echo "Defaults env_keep += \"http_proxy https_proxy ftp_proxy all_proxy HTTP_PROXY HTTPS_PROXY ALL_PROXY\"" | sudo tee /etc/sudoers.d/temp_proxy_keep >/dev/null
+# 赋予正确的权限 (0440)
+sudo chmod 0440 /etc/sudoers.d/temp_proxy_keep
+echo "✓ Sudo/Root 代理权限已配置"
+
 # 检测桌面环境并设置系统代理
 if set -q XDG_CURRENT_DESKTOP
     switch $XDG_CURRENT_DESKTOP
@@ -88,7 +103,7 @@ else
 end
 
 echo ""
-echo "🚀 代理已开启"
+echo "🚀 全局代理已开启 (包含 Shell, Git, Sudo, GUI)"
 echo "   SOCKS5: socks5://$PROXY_SERVER:$PROXY_PORT"
 echo "   HTTP/HTTPS: http://$PROXY_SERVER:$PROXY_PORT_HTTP"
 echo ""

@@ -1,0 +1,21 @@
+// 将键绑定放在此文件中以覆盖默认值
+[
+    {
+        "key": "ctrl+enter",
+        "command": "-editor.action.goToDeclaration",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+enter",
+        "command": "-lineBreakInsert",
+        "when": "editorTextFocus && !editorReadonly"
+    },
+    {
+        "key": "ctrl+\\",
+        "command": "-workbench.action.splitEditor"
+    },
+    {
+        "key": "ctrl+shift+0",
+        "command": "java.action.generateConstructorsPrompt"
+    }
+]
