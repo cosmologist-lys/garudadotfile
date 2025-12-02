@@ -2,6 +2,13 @@
 
 set -e
 
+# --- 颜色定义 (从 setup.sh 继承) ---
+GREEN=${GREEN:-\033[0;32m}
+BLUE=${BLUE:-\033[0;34m}
+RED=${RED:-\033[0;31m}
+YELLOW=${YELLOW:-\033[1;33m}
+NC=${NC:-\033[0m}
+
 # 获取脚本所在目录的父目录（项目根目录）
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE_DIR="$(dirname "$SCRIPT_DIR")"
@@ -14,11 +21,11 @@ have_pkg() {
 ensure_fcitx5_packages() {
     # 检查是否已安装主要包
     if have_pkg fcitx5; then
-        echo "Fcitx5 已安装，跳过包安装。"
+        echo -e "${YELLOW}Fcitx5 已安装，跳过包安装。${NC}"
         return
     fi
 
-    echo "安装 Fcitx5 及相关组件..."
+    echo -e "${BLUE}安装 Fcitx5 及相关组件...${NC}"
     # fcitx5-im: 基础框架和输入法引擎
     # fcitx5-chinese-addons: 拼音等中文输入法
     # fcitx5-pinyin-zhwiki: 拼音词库（来自中文维基百科）
@@ -35,13 +42,13 @@ ensure_environment_variables() {
     # 在 /etc/environment 中配置对所有会话都生效
     ENV_FILE="/etc/environment"
 
-    echo "检查和配置输入法环境变量..."
+    echo -e "${BLUE}检查和配置输入法环境变量...${NC}"
 
     # 检查是否已配置
     if grep -q "GTK_IM_MODULE=fcitx" "$ENV_FILE" && \
        grep -q "QT_IM_MODULE=fcitx" "$ENV_FILE" && \
        grep -q "XMODIFIERS=@im=fcitx" "$ENV_FILE"; then
-        echo "输入法环境变量已配置，跳过。"
+        echo -e "${YELLOW}输入法环境变量已配置，跳过。${NC}"
         return
     fi
 
@@ -63,7 +70,7 @@ XMODIFIERS=@im=fcitx
 SDL_IM_MODULE=fcitx
 EOF"
 
-    echo "输入法环境变量配置完成。"
+    echo -e "${GREEN}输入法环境变量配置完成。${NC}"
 }
 
 ensure_fcitx5_autostart() {
@@ -72,47 +79,47 @@ ensure_fcitx5_autostart() {
     local autostart_file="/etc/xdg/autostart/org.fcitx.Fcitx5.desktop"
 
     if [ -f "$autostart_file" ]; then
-        echo "✓ Fcitx5 自动启动配置已存在"
-        echo "  位置：$autostart_file"
+        echo -e "${GREEN}✓ Fcitx5 自动启动配置已存在${NC}"
+        echo -e "  ${BLUE}位置：$autostart_file${NC}"
     else
-        echo "⚠ 警告：未找到 Fcitx5 自动启动文件"
-        echo "  预期位置：$autostart_file"
-        echo "  Fcitx5 可能需要手动启动"
+        echo -e "${YELLOW}⚠ 警告：未找到 Fcitx5 自动启动文件${NC}"
+        echo -e "  ${YELLOW}预期位置：$autostart_file${NC}"
+        echo -e "  ${YELLOW}Fcitx5 可能需要手动启动${NC}"
     fi
 
     # 提示用户如何手动启动（如果需要）
     echo ""
-    echo "提示：Fcitx5 会在重新登录后自动启动"
-    echo "      如需立即启动，请运行：fcitx5 &"
+    echo -e "${YELLOW}提示：Fcitx5 会在重新登录后自动启动${NC}"
+    echo -e "      ${YELLOW}如需立即启动，请运行：fcitx5 &${NC}"
 }
 
 main() {
-    echo "=== 安装 Fcitx5 输入法 ==="
+    echo -e "${BLUE}=== 安装 Fcitx5 输入法 ===${NC}"
     ensure_fcitx5_packages
 
     echo ""
-    echo "=== 配置环境变量 ==="
+    echo -e "${BLUE}=== 配置环境变量 ===${NC}"
     ensure_environment_variables
 
     echo ""
-    echo "=== 检查自动启动配置 ==="
+    echo -e "${BLUE}=== 检查自动启动配置 ===${NC}"
     ensure_fcitx5_autostart
 
     echo ""
-    echo "=========================================="
-    echo "✓ Fcitx5 输入法配置完成！"
-    echo "=========================================="
+    echo -e "${BLUE}==========================================${NC}"
+    echo -e "${GREEN}✓ Fcitx5 输入法配置完成！${NC}"
+    echo -e "${BLUE}==========================================${NC}"
     echo ""
-    echo "📝 重要提示："
-    echo "  1. 环境变量已配置到 /etc/environment"
-    echo "  2. 需要重新登录或重启系统才能生效"
-    echo "  3. 重新登录后，Fcitx5 会自动启动"
+    echo -e "${YELLOW}📝 重要提示：${NC}"
+    echo -e "  1. ${BLUE}环境变量已配置到 /etc/environment${NC}"
+    echo -e "  2. ${BLUE}需要重新登录或重启系统才能生效${NC}"
+    echo -e "  3. ${BLUE}重新登录后，Fcitx5 会自动启动${NC}"
     echo ""
-    echo "🚀 立即测试（可选）："
-    echo "  source /etc/environment && fcitx5 &"
+    echo -e "${YELLOW}🚀 立即测试（可选）：${NC}"
+    echo -e "  ${GREEN}source /etc/environment && fcitx5 &${NC}"
     echo ""
-    echo "⚙️  配置输入法："
-    echo "  重新登录后运行：fcitx5-configtool"
+    echo -e "${YELLOW}⚙️  配置输入法：${NC}"
+    echo -e "  ${GREEN}重新登录后运行：fcitx5-configtool${NC}"
 }
 
 main "$@"

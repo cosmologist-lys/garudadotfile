@@ -1,10 +1,11 @@
 #!/bin/bash
 
 # 颜色定义
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-RED='\033[0;31m'
-NC='\033[0m'
+export GREEN='\033[0;32m'
+export BLUE='\033[0;34m'
+export RED='\033[0;31m'
+export YELLOW='\033[1;33m'
+export NC='\033[0m'
 
 # 获取脚本当前绝对路径
 export BASE_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
@@ -33,23 +34,32 @@ case "$choice" in
     ;;
 esac
 
+# --- 动态调用模块 ---
+
 # 赋予所有子脚本执行权限
 chmod +x "$MODULES_DIR"/*.sh 2>/dev/null || true
 
-# --- 按顺序调用模块 ---
+# 获取所有模块脚本
+modules=($(ls "$MODULES_DIR"/*.sh | sort))
+module_count=${#modules[@]}
+current_module=1
 
-# 模块 1: ArchLinuxCN
-echo -e "\n${GREEN}>>> [1/3] 正在执行 ArchLinuxCN 配置模块...${NC}"
-"$MODULES_DIR/01_archlinuxcn.sh"
+# 循环执行所有模块
+for module_path in "${modules[@]}"; do
+    module_name=$(basename "$module_path")
+    echo -e "\n${BLUE}>>> [${current_module}/${module_count}] 正在执行模块: ${module_name}${NC}"
 
-# 模块 2: V2Ray & Network
-echo -e "\n${GREEN}>>> [2/3] 正在执行 V2Ray 网络代理模块...${NC}"
-"$MODULES_DIR/02_v2ray.sh"
+    # 执行模块脚本
+    if ! "$module_path"; then
+        echo -e "\n${RED}✗ 模块 ${module_name} 执行失败，已中断脚本。${NC}"
+        echo -e "${YELLOW}请检查以上错误信息。${NC}"
+        exit 1
+    fi
 
-# 模块 3: Fcitx5 输入法
-echo -e "\n${GREEN}>>> [3/3] 正在执行输入法模块...${NC}"
-"$MODULES_DIR/03_fcitx5.sh"
+    echo -e "${GREEN}✓ 模块 ${module_name} 执行完成。${NC}"
+    ((current_module++))
+done
 
 echo -e "\n${BLUE}=========================================${NC}"
-echo -e "${BLUE}   所有任务执行完毕！请重启系统。        ${NC}"
+echo -e "${GREEN}   所有任务执行完毕！请重启系统。        ${NC}"
 echo -e "${BLUE}=========================================${NC}"

@@ -1,7 +1,6 @@
 cweijan.dbclient-jdbc
 cweijan.vscode-mysql-client2
 dotjoshjohnson.xml
-doubao.doubao-app-share-vscode-plugin
 fill-labs.dependi
 github.copilot
 github.copilot-chat
