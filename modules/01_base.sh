@@ -134,6 +134,49 @@ ensure_fish_shell() {
     fi
 }
 
+# 5. [新增] 确保 Paru 已安装
+ensure_paru() {
+    echo -e "${BLUE}>>> 检查 AUR 助手 (paru)...${NC}"
+
+    if have_cmd paru; then
+        echo -e "${YELLOW}paru 已安装。${NC}"
+        return
+    fi
+
+    echo -e "${BLUE}正在安装 paru...${NC}"
+
+    # 策略 A: 尝试直接从仓库安装 (Garuda/CN 源里通常都有)
+    # 这是最快的方法
+    if sudo pacman -S --noconfirm paru; then
+        echo -e "${GREEN}paru 安装成功 (via Pacman)。${NC}"
+        return
+    fi
+
+    # 策略 B: 如果仓库里没有，则手动编译安装 (paru-bin)
+    echo -e "${YELLOW}仓库中未找到 paru，尝试从 AUR 编译安装...${NC}"
+
+    # 安装编译依赖
+    sudo pacman -S --noconfirm --needed base-devel git
+
+    # 创建临时构建目录
+    BUILD_DIR=$(mktemp -d)
+    echo -e "克隆 paru-bin..."
+
+    # 尝试克隆
+    if git clone https://aur.archlinux.org/paru-bin.git "$BUILD_DIR"; then
+        pushd "$BUILD_DIR" >/dev/null
+        # 编译安装
+        makepkg -si --noconfirm
+        popd >/dev/null
+        rm -rf "$BUILD_DIR"
+        echo -e "${GREEN}paru 编译安装成功。${NC}"
+    else
+        echo -e "${RED}错误：无法从 AUR 克隆 paru-bin。请检查网络。${NC}"
+        rm -rf "$BUILD_DIR"
+        exit 1
+    fi
+}
+
 main() {
     echo -e "${BLUE}>>> 开始配置 ArchLinuxCN 源...${NC}"
     ensure_archcn_repo
@@ -143,6 +186,9 @@ main() {
     echo -e "${BLUE}>>> 开始配置基础 Shell(Fish)...${NC}"
     ensure_fish_shell
     echo -e "${GREEN}>>> Shell(Fish) 配置完成。${NC}"
+    echo -e "${BLUE}>>> 开始配置AUR (paru)...${NC}"
+    ensure_paru
+    echo -e "${GREEN}>>> AUR(paru) 配置完成。${NC}"
 }
 
 main "$@"
